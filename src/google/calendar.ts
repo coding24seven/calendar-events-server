@@ -1,0 +1,23 @@
+import oauth2Client from '../google/oauth2-client'
+import axios from 'axios'
+import rfc3339 from '../utils/date'
+
+async function getEventList() {
+  const now = rfc3339(new Date())
+  const calendarUrl = `https://www.googleapis.com/calendar/v3/calendars/primary/events?timeMin=${now}`
+
+  try {
+    const { access_token } = oauth2Client.credentials
+    const response = await axios.get(calendarUrl, {
+      headers: {
+        Authorization: `Bearer ${access_token}`,
+      },
+    })
+
+    return response.data.items
+  } catch (error) {
+    return (error as Error).message
+  }
+}
+
+export default getEventList

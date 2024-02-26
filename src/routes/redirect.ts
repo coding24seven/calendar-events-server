@@ -10,7 +10,7 @@ router.get('/', async (req, res) => {
 
   oauth2Client.setCredentials(tokens)
 
-  res.cookie('access_token', tokens.access_token)
+  res.cookie('is-logged-in', true)
   res.redirect('http://localhost:3000')
 })
 

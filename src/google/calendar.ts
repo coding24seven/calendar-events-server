@@ -2,9 +2,13 @@ import oauth2Client from '../google/oauth2-client'
 import axios from 'axios'
 import rfc3339 from '../utils/date'
 
-async function getEventList() {
+async function getEventList(maxResults?: string) {
   const now = rfc3339(new Date())
-  const calendarUrl = `https://www.googleapis.com/calendar/v3/calendars/primary/events?timeMin=${now}`
+  let calendarUrl = `https://www.googleapis.com/calendar/v3/calendars/primary/events?timeMin=${now}`
+
+  if (maxResults) {
+    calendarUrl += `&maxResults=${maxResults}`
+  }
 
   try {
     const { access_token } = oauth2Client.credentials

@@ -5,7 +5,6 @@ const router = express.Router()
 
 router.get('/', async (req, res) => {
   const { code } = req.query
-
   const { tokens } = await oauth2Client.getToken(code as string)
 
   oauth2Client.setCredentials(tokens)
@@ -15,4 +14,3 @@ router.get('/', async (req, res) => {
 })
 
 export default router
-

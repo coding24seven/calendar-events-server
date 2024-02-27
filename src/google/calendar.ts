@@ -4,7 +4,7 @@ import rfc3339 from '../utils/date'
 
 async function getEventList(maxResults?: string) {
   const now = rfc3339(new Date())
-  let calendarUrl = `https://www.googleapis.com/calendar/v3/calendars/primary/events?timeMin=${now}`
+  let calendarUrl = `https://www.googleapis.com/calendar/v3/calendars/primary/events?singleEvents=true&orderBy=startTime&timeMin=${now}`
 
   if (maxResults) {
     calendarUrl += `&maxResults=${maxResults}`

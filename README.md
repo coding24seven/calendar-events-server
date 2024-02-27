@@ -1,0 +1,1 @@
+this repo contains docker-compose file for both server and client. to run the app, place the client repo (found at https://github.com/coding24seven/calendar-events-client) next to this one, then run `docker-compose up`.

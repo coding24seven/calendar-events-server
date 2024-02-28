@@ -5,7 +5,10 @@ const router = express.Router()
 
 router.get('/', (req, res) => {
   const authorizationPageUrl = oauth2Client.generateAuthUrl({
-    scope: ['https://www.googleapis.com/auth/calendar.readonly'],
+    scope: [
+      'https://www.googleapis.com/auth/userinfo.email',
+      'https://www.googleapis.com/auth/calendar.readonly',
+    ],
   })
 
   res.send(authorizationPageUrl)

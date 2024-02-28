@@ -10,7 +10,7 @@ const app = express()
 app.use(cors())
 
 app.get('/', (req, res) => {
-  res.send('hello')
+  res.send('hello from calendar server')
 })
 
 app.listen(8080)

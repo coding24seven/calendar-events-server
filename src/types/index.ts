@@ -1,4 +1,4 @@
-interface IdTokenUserData {
+interface UserData {
   iss: string
   azp: string
   aud: string
@@ -8,6 +8,7 @@ interface IdTokenUserData {
   at_hash: string
   iat: number
   exp: number
+  access_token_expiry: number
 }
 
-export { IdTokenUserData }
+export { UserData }

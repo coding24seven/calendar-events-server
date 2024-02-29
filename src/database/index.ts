@@ -37,11 +37,15 @@ function setUpServiceAccount() {
       'Missing or invalid environment variables for ServiceAccountCredentials'
     )
   } else {
+    const { privateKey } = JSON.parse(
+      `{"privateKey": "${process.env.SERVICE_ACCOUNT_PRIVATE_KEY}"}`
+    )
+
     credentials = {
       type: process.env.SERVICE_ACCOUNT_TYPE,
       project_id: process.env.SERVICE_ACCOUNT_PROJECT_ID,
       private_key_id: process.env.SERVICE_ACCOUNT_PRIVATE_KEY_ID,
-      private_key: process.env.SERVICE_ACCOUNT_PRIVATE_KEY,
+      private_key: privateKey,
       client_email: process.env.SERVICE_ACCOUNT_CLIENT_EMAIL,
       client_id: process.env.SERVICE_ACCOUNT_CLIENT_ID,
       auth_uri: process.env.SERVICE_ACCOUNT_AUTH_URI,

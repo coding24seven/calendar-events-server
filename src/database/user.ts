@@ -4,7 +4,7 @@ import { UserData } from '../types'
 class UserDatabase {
   public static async getUser(document: UserData) {
     const uniqueUserId = document.sub
-    const docRef = (await db).collection('users').doc(uniqueUserId)
+    const docRef = db.collection('users').doc(uniqueUserId)
 
     return await docRef.get()
   }
@@ -15,7 +15,7 @@ class UserDatabase {
 
   public static async addUser(document: UserData) {
     const uniqueUserId = document.sub
-    const docRef = (await db).collection('users').doc(uniqueUserId)
+    const docRef = db.collection('users').doc(uniqueUserId)
 
     await docRef.set({
       id: uniqueUserId,
@@ -25,7 +25,7 @@ class UserDatabase {
 
   public static async deleteUser(document: UserData) {
     const uniqueUserId = document.sub
-    const docRef = (await db).collection('users').doc(uniqueUserId)
+    const docRef = db.collection('users').doc(uniqueUserId)
 
     await docRef.delete()
   }

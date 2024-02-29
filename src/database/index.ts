@@ -5,15 +5,29 @@ import {
   applicationDefault,
 } from 'firebase-admin/app'
 import { getFirestore } from 'firebase-admin/firestore'
-import serviceAccount from './private-key-firebase-admin.json'
 
-const serviceAccountObject =
-  process.env.NODE_ENV === 'production' ? applicationDefault() : serviceAccount
+async function setUpServiceAccount() {
+  const serviceAccountObject =
+    process.env.NODE_ENV === 'production'
+      ? applicationDefault()
+      : await getServiceAccount()
 
-initializeApp({
-  credential: cert(serviceAccountObject as ServiceAccount),
-})
+  initializeApp({
+    credential: cert(serviceAccountObject as ServiceAccount),
+  })
 
-const db = getFirestore()
+  return getFirestore()
+}
 
-export default db
+async function getServiceAccount() {
+  const filePath = './private-key-firebase-admin.json'
+  try {
+    const { default: serviceAccount } = await import(filePath)
+
+    return serviceAccount
+  } catch (error) {
+    console.error('Error loading service account:', error)
+  }
+}
+
+export default setUpServiceAccount()

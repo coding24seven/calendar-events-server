@@ -6,15 +6,28 @@ import {
 } from 'firebase-admin/app'
 import { getFirestore } from 'firebase-admin/firestore'
 
-async function setUpServiceAccount() {
-  const serviceAccountObject =
-    process.env.NODE_ENV === 'production'
-      ? applicationDefault()
-      : await getServiceAccount()
+interface ServiceAccountCredentials extends ServiceAccount {
+  project_id: string
+}
 
-  initializeApp({
-    credential: cert(serviceAccountObject as ServiceAccount),
-  })
+async function setUpServiceAccount() {
+  let credentials: ServiceAccountCredentials
+
+  if (process.env.NODE_ENV === 'production') {
+    credentials = applicationDefault() as unknown as ServiceAccountCredentials
+  } else {
+    credentials =
+      (await getServiceAccount()) as unknown as ServiceAccountCredentials
+  }
+
+  const initializeAppOptions = {
+    credential: cert(credentials),
+    ...(process.env.NODE_ENV === 'production' && {
+      projectId: credentials.project_id,
+    }),
+  }
+
+  initializeApp(initializeAppOptions)
 
   return getFirestore()
 }

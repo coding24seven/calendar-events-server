@@ -5,7 +5,12 @@ import User from '../User'
 const router = express.Router()
 
 router.get('/', async (req, res) => {
-  const { code } = req.query
+  const code = req.query.code
+
+  if (!code) {
+    res.status(400).json({ error: 'authorization code missing' })
+  }
+
   const { tokens } = await oauth2Client.getToken(code as string)
 
   oauth2Client.setCredentials(tokens)
@@ -25,7 +30,7 @@ router.get('/', async (req, res) => {
   if (process.env.CLIENT_URI) {
     res.redirect(process.env.CLIENT_URI)
   } else {
-    res.status(500).send('client uri is not defined')
+    res.status(500).json({ error: 'client uri is not defined' })
   }
 })
 

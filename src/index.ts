@@ -13,7 +13,7 @@ app.get('/', (req, res) => {
   res.send('hello from calendar server')
 })
 
-app.listen(8080)
+app.listen(process.env.PORT || 8080)
 
 app.use('/auth-page-url', authPageUrl)
 app.use('/redirect', redirect)

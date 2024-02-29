@@ -25,7 +25,7 @@ router.get('/', async (req, res) => {
     await user.addToDatabase(userData)
   }
 
-  res.cookie('is-logged-in', true)
+  res.cookie('is-logged-in', true, { sameSite: 'lax' })
 
   if (process.env.CLIENT_URI) {
     res.redirect(process.env.CLIENT_URI)

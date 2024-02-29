@@ -1,5 +1,7 @@
 import { google } from 'googleapis'
 console.log('process.env.REDIRECT_URI', process.env.REDIRECT_URI)
+console.log('process.env.CLIENT_ID', process.env.CLIENT_ID)
+console.log('process.env.CLIENT_SECRET', process.env.CLIENT_SECRET)
 
 const oauth2Client = new google.auth.OAuth2(
   process.env.CLIENT_ID,

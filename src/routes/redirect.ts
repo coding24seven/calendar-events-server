@@ -21,7 +21,12 @@ router.get('/', async (req, res) => {
   }
 
   res.cookie('is-logged-in', true)
-  res.redirect('http://localhost:3000')
+
+  if (process.env.CLIENT_URI) {
+    res.redirect(process.env.CLIENT_URI)
+  } else {
+    res.status(500).send('client uri is not defined')
+  }
 })
 
 export default router

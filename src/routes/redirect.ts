@@ -14,8 +14,6 @@ router.get('/', async (req, res) => {
 
   const { tokens } = await oauth2Client.getToken(code as string)
 
-  // oauth2Client.setCredentials(tokens)
-
   let userData: UserData | null = null
 
   if (tokens.id_token && tokens.expiry_date) {
@@ -26,17 +24,14 @@ router.get('/', async (req, res) => {
   }
 
   if (!userData) {
+    res.status(500).json({ error: 'user data proessing error' })
+
     return
   }
 
-  res.cookie('is-logged-in', true, {
-    domain: process.env.CLIENT_URI,
-    sameSite: 'none',
-  })
+  res.cookie('is-logged-in', true)
   res.cookie('session-id', userData.session_id, {
-    domain: process.env.CLIENT_URI,
     httpOnly: true,
-    sameSite: 'none',
   })
 
   if (process.env.CLIENT_URI) {

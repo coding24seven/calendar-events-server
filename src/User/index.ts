@@ -1,27 +1,24 @@
 import { jwtDecode } from 'jwt-decode'
-import { UserData } from '../types'
-import UserDatabase from '../database/user'
+import { Tokens, UserData } from '../types'
+import UserDatabase from '../database/user-database'
 import crypto from 'crypto'
 
 class User {
-  public buildUserData(idToken: string, expiryDate: number): UserData {
+  public buildUserData(tokens: Tokens): UserData {
     return {
-      ...jwtDecode(idToken),
-      access_token_expiry_date: expiryDate,
+      ...jwtDecode(tokens.id_token),
+      access_token: tokens.access_token,
+      access_token_expiry_date: tokens.expiry_date,
       session_id: crypto.randomBytes(24).toString('hex'),
     }
-  }
-
-  public async isInDatabase(data: UserData) {
-    return await UserDatabase.userIsInDatabase(data)
   }
 
   public async addToDatabase(data: UserData) {
     await UserDatabase.addUser(data)
   }
 
-  public async removeFromDatabase(data: UserData) {
-    await UserDatabase.deleteUser(data)
+  public async removeFromDatabase(sessionId: string) {
+    await UserDatabase.deleteUser(sessionId)
   }
 }
 

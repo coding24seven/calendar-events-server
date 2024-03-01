@@ -1,8 +1,8 @@
-import oauth2Client from '../google/oauth2-client'
 import axios from 'axios'
 import rfc3339 from '../utils/date'
+import UserDatabase from '../database/user-database'
 
-async function getEventList(maxResults?: string) {
+async function getEventList(sessionId: string, maxResults?: string) {
   const now = rfc3339(new Date())
   let calendarUrl = `https://www.googleapis.com/calendar/v3/calendars/primary/events?singleEvents=true&orderBy=startTime&timeMin=${now}`
 
@@ -11,10 +11,15 @@ async function getEventList(maxResults?: string) {
   }
 
   try {
-    const { access_token } = oauth2Client.credentials
+    const user = await UserDatabase.getUser(sessionId)
+
+    if (!user || user.sessionId !== sessionId) {
+      throw new Error('user does not exist')
+    }
+
     const response = await axios.get(calendarUrl, {
       headers: {
-        Authorization: `Bearer ${access_token}`,
+        Authorization: `Bearer ${user.accessToken}`,
       },
     })
 

@@ -1,7 +1,7 @@
 import { initializeApp, cert, ServiceAccount } from 'firebase-admin/app'
 import { getFirestore } from 'firebase-admin/firestore'
 
-interface ServiceAccountCredentials extends ServiceAccount {
+export interface ServiceAccountCredentials extends ServiceAccount {
   type: string
   project_id: string
   private_key_id: string

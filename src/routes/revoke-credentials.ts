@@ -1,24 +1,23 @@
 import express from 'express'
-import oauth2Client from '../google/oauth2-client'
-import User from '../User'
+import UserDatabase from '../database/user-database'
 
 const router = express.Router()
 
 router.post('/', async (req, res) => {
-  const { credentials } = oauth2Client
+  const sessionId = req.query.sessionId as string
 
-  if (credentials.access_token) {
-    oauth2Client.revokeCredentials()
+  if (!sessionId) {
+    res.status(400).json({ error: 'session id missing' })
 
-    if (credentials.id_token && credentials.expiry_date) {
-      const user = new User()
-      const userData = user.buildUserData(
-        credentials.id_token,
-        credentials.expiry_date
-      )
+    return
+  }
 
-      await user.removeFromDatabase(userData)
-    }
+  try {
+    await UserDatabase.deleteUser(sessionId)
+  } catch (error) {
+    res.status(400).json({ error: 'could not revoke credentials' })
+
+    return
   }
 
   res.send({ message: 'credentials revoked' })

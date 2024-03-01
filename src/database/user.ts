@@ -15,10 +15,12 @@ class UserDatabase {
 
   public static async addUser(document: UserData) {
     const uniqueUserId = document.sub
+    const sessionId = document.session_id
     const docRef = db.collection('users').doc(uniqueUserId)
 
     await docRef.set({
       id: uniqueUserId,
+      sessionId,
       email: document.email,
     })
   }

@@ -12,7 +12,7 @@ router.post('/', async (req, res) => {
 
     if (credentials.id_token && credentials.expiry_date) {
       const user = new User()
-      const userData = user.buildUserfromIdTokenWithExpiry(
+      const userData = user.buildUserData(
         credentials.id_token,
         credentials.expiry_date
       )

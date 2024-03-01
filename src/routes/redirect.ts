@@ -1,6 +1,7 @@
 import express from 'express'
 import oauth2Client from '../google/oauth2-client'
 import User from '../User'
+import { UserData } from '../types'
 
 const router = express.Router()
 
@@ -13,19 +14,30 @@ router.get('/', async (req, res) => {
 
   const { tokens } = await oauth2Client.getToken(code as string)
 
-  oauth2Client.setCredentials(tokens)
+  // oauth2Client.setCredentials(tokens)
+
+  let userData: UserData | null = null
 
   if (tokens.id_token && tokens.expiry_date) {
     const user = new User()
-    const userData = user.buildUserfromIdTokenWithExpiry(
-      tokens.id_token,
-      tokens.expiry_date
-    )
+    userData = user.buildUserData(tokens.id_token, tokens.expiry_date)
 
     await user.addToDatabase(userData)
   }
 
-  res.cookie('is-logged-in', true, { sameSite: 'lax' })
+  if (!userData) {
+    return
+  }
+
+  res.cookie('is-logged-in', true, {
+    domain: process.env.CLIENT_URI,
+    sameSite: 'none',
+  })
+  res.cookie('session-id', userData.session_id, {
+    domain: process.env.CLIENT_URI,
+    httpOnly: true,
+    sameSite: 'none',
+  })
 
   if (process.env.CLIENT_URI) {
     res.redirect(process.env.CLIENT_URI)

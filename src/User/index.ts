@@ -1,15 +1,14 @@
 import { jwtDecode } from 'jwt-decode'
 import { UserData } from '../types'
 import UserDatabase from '../database/user'
+import crypto from 'crypto'
 
 class User {
-  public buildUserfromIdTokenWithExpiry(
-    idToken: string,
-    expiryDate: number
-  ): UserData {
+  public buildUserData(idToken: string, expiryDate: number): UserData {
     return {
       ...jwtDecode(idToken),
-      access_token_expiry: expiryDate,
+      access_token_expiry_date: expiryDate,
+      session_id: crypto.randomBytes(24).toString('hex'),
     }
   }
 

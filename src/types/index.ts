@@ -8,7 +8,8 @@ interface UserData {
   at_hash: string
   iat: number
   exp: number
-  access_token_expiry: number
+  access_token_expiry_date: number
+  session_id: string
 }
 
 export { UserData }
